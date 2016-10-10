@@ -28,6 +28,7 @@ public class FirstAgent : MonoBehaviour {
 	void MoveBackward(){
 	}
 
+/*
 	ArrayList FieldOfView(){
 		//loop through all objects and do this math, add it to arraylist and return arraylist
 
@@ -38,9 +39,11 @@ public class FirstAgent : MonoBehaviour {
 			//object is in vision
 		}
 	}
+*/
 
 	//might need?
-	boolean isSeen(ArrayList viewedObjects, GameObject obj){
+	bool isSeen(ArrayList viewedObjects, GameObject obj){
 		//loop through arraylist to see if specific object is in there
+		return true;
 	}
 }
