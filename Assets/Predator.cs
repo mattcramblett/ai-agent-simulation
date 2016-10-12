@@ -9,14 +9,21 @@ public class Predator : MonoBehaviour {
 
 	public class PredatorSprite {
 		public GameObject body;
-		bool attack; //two states: explore and attack
+		bool roaming; //moves throughout scene, Prey not seen
+		bool alerted; //sees Prey from a distance, starts following slowly
+		bool attacking; //sees Prey close by, follows prey quickly
+		bool swarming; //alerts other predators - they switch to attack mode
 
-		//constructor:
+
+		//CONSTRUCTOR:
 		public PredatorSprite(string name){
 			body = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			//initial state is EXPLORE:
-			attack = false;
-			//semi-random start position:
+			//initial state is roaming:
+			roaming = true;
+			alerted = false;
+			attacking = false;
+			swarming = false;
+			//semi-random start position: (currently top corner area)
 			body.transform.position = new Vector3(Random.Range(5f, 15f), 0.5f, Random.Range(5f, 15f));
 			//Add the material for color:
 			Material material = new Material(Shader.Find("Standard"));
@@ -25,6 +32,35 @@ public class Predator : MonoBehaviour {
 			//set name of PredatorSprite object (may come in handy for lookup):
 			body.name = name;
 		}
+
+		/* this method could return an update to a position vector, but otherwise should
+		** just update the predator to follow some path (random or not)
+		*/
+		public roam(){
+
+		}
+
+		/* This method is for when the Predator becomes alert, and should then start following the prey
+		** by closing in on it
+		*/
+		public alert(){
+
+		}
+
+		/* This method will basically be the same as alert but the movement will be fast
+		** note: should eventually end after certain amount of frames.
+		*/
+		public attack(){
+
+		}
+
+		/* Set all other Predators to either alert or attack. 
+		** Probably triggered right after attack.
+		*/
+		public swarm(){
+
+		}
+
 	}
 
 	// Use this for initialization
