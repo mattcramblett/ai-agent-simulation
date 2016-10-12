@@ -9,13 +9,13 @@ public class Predator : MonoBehaviour {
 
 	public class PredatorSprite {
 		public GameObject body;
-		int state; //two states: 0 = EXPLORE, 1 = ATTACK
+		bool attack; //two states: explore and attack
 
 		//constructor:
 		public PredatorSprite(string name){
 			body = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			//initial state is EXPLORE:
-			state = 0;
+			attack = false;
 			//semi-random start position:
 			body.transform.position = new Vector3(Random.Range(5f, 15f), 0.5f, Random.Range(5f, 15f));
 			//Add the material for color:
