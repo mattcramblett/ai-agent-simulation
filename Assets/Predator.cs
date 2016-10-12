@@ -36,28 +36,28 @@ public class Predator : MonoBehaviour {
 		/* this method could return an update to a position vector, but otherwise should
 		** just update the predator to follow some path (random or not)
 		*/
-		public roam(){
+		public void roam(){
 
 		}
 
 		/* This method is for when the Predator becomes alert, and should then start following the prey
 		** by closing in on it
 		*/
-		public alert(){
+		public void alert(){
 
 		}
 
 		/* This method will basically be the same as alert but the movement will be fast
 		** note: should eventually end after certain amount of frames.
 		*/
-		public attack(){
+		public void attack(){
 
 		}
 
 		/* Set all other Predators to either alert or attack. 
 		** Probably triggered right after attack.
 		*/
-		public swarm(){
+		public void swarm(){
 
 		}
 
