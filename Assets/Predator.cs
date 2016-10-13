@@ -91,6 +91,13 @@ public class Predator : MonoBehaviour {
 
 		public int visionTest(){
 			int distance = -1;
+			GameObject target = GameObject.Find ("Prey");
+			Vector3 toTarget = target.transform.position - body.transform.position;
+			Vector3 orientation = body.transform.forward;
+			float angle = Vector3.Dot (orientation, toTarget);
+			if (angle < 15 && angle > -15) {
+				//in sight
+			}
 			return distance;
 		}
 
