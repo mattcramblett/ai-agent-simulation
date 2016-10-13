@@ -114,11 +114,22 @@ public class Predator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		foreach (PredatorSprite p in Predators){
+
+			if (Input.GetKey(KeyCode.A)){
+				p.body.transform.position += Vector3.left * rate * Time.deltaTime;
+			}else if (Input.GetKey(KeyCode.D)){
+				p.body.transform.position += Vector3.right * rate * Time.deltaTime;
+			}else if (Input.GetKey(KeyCode.W)){
+				p.body.transform.position += Vector3.forward * rate * Time.deltaTime;
+			}else if (Input.GetKey(KeyCode.S)){
+				p.body.transform.position -= Vector3.forward * rate * Time.deltaTime;
+			}
+
 			int preySeen = p.visionTest ();
 			//may need to change this: if value is so low, probably touched and game over
 			if (preySeen >= 0) {
 				//prey is within attack range and has not lost interest
-				if (preySeen >= attackThreshold && p.interest() < loseInterestThreshold) {
+				if (preySeen >= attackThreshold && p.interest("check") < loseInterestThreshold) {
 					//if attacking, make sure lose interest count remains at 0
 					p.interest ("reset");
 					p.attack ();
