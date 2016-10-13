@@ -89,14 +89,23 @@ public class Predator : MonoBehaviour {
 
 		}
 
+		public void rotate(){
+		
+		}
+
 		public int visionTest(){
 			int distance = -1;
 			GameObject target = GameObject.Find ("Prey");
+			//distance to target - magnitude of sight matters with this
 			Vector3 toTarget = target.transform.position - body.transform.position;
+
 			Vector3 orientation = body.transform.forward;
-			float angle = Vector3.Dot (orientation, toTarget);
-			if (angle < 15 && angle > -15) {
+			//this math is not quite right yet.
+			float angle = Vector3.Dot (orientation, toTarget.normalized);
+			//result of 1 means it's right in front. make comparison value SMALLER for LARGER site cone
+			if (angle >= .95 ) {
 				//in sight
+				print("in sight!");
 			}
 			return distance;
 		}
