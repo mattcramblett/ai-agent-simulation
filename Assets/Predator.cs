@@ -75,18 +75,28 @@ public class Predator : MonoBehaviour {
 		** note: should eventually end after certain amount of frames.
 		*/
 		public void attack(){
-
+			if(this.attacking){
+				float moveSpeed = 4f; //faster speeds for attack
+				float rotationSpeed = 6f;
+				Transform target = GameObject.Find("Prey").transform;
+				//rotate to look at the player
+    			this.body.transform.rotation = Quaternion.Slerp(this.body.transform.rotation,
+    			Quaternion.LookRotation(target.position - this.body.transform.position), rotationSpeed*Time.deltaTime);
+ 				//move towards the player
+ 				this.body.transform.position += this.body.transform.forward * moveSpeed * Time.deltaTime;
+ 			}
 		}
 
 		/* Set all other Predators to either alert or attack. 
 		** Probably triggered right after attack.
 		*/
 		public void swarm(){
-
+			//TODO: Set other predators' attacking attribute to true
 		}
 
 		public void rotate(){
-		
+			//TODO: do we still need this? I don't remember. I added rotation into the attack and alert methods
+			//but this might be something different
 		}
 
 		public int visionTest(){
@@ -99,10 +109,14 @@ public class Predator : MonoBehaviour {
 			//this math is not quite right yet.
 			float angle = Vector3.Dot (orientation, toTarget.normalized);
 			//result of 1 means it's right in front. make comparison value SMALLER for LARGER site cone
-			if (angle >= .9f ) {
+			if (angle >= .95f ) {
 				//in sight
+				print("attack!");
+				this.attacking = true; //triggers attack() method to run
+				this.alerted = false;
+			} else if (angle >= .8f){
 				print("in sight!");
-				this.alerted = true;
+				this.alerted = true; //triggers alert() method to run
 			}
 			return distance;
 		}
@@ -129,10 +143,16 @@ public class Predator : MonoBehaviour {
 		foreach (PredatorSprite p in Predators){
 			Vector3 distance = GameObject.Find("Prey").transform.position - p.body.transform.position;
 			int preySeen = p.visionTest ();
-			//p.alerted = true;
-			p.alert();
+
+			p.alert(); //calling this by default, this method checks if alerted == true
+			p.attack(); //same ^
+
+			//TODO: This code wasn't running (based off of print statement) Still need to handle
+			//the interest level portion.
+			/*
 			//may need to change this: if value is so low, probably touched and game over
 			if (preySeen >= 0) {
+				print("PREY SEEN");
 				//prey is within attack range and has not lost interest
 				if (preySeen >= attackThreshold && p.interest("check") < loseInterestThreshold) {
 					//if attacking, make sure lose interest count remains at 0
@@ -151,6 +171,7 @@ public class Predator : MonoBehaviour {
 				p.interest ("increase");
 				p.roam ();
 			}
+			*/
 		}
 	}
 }
