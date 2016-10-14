@@ -52,7 +52,12 @@ public class Predator : MonoBehaviour {
 		** just update the predator to follow some path (random or not)
 		*/
 		public void roam(){
-
+			if(this.roaming){
+				this.body.transform.position += Vector3.left * Random.Range(1f, 2f) * Time.deltaTime;
+				this.body.transform.position += Vector3.right * Random.Range(1f, 2f) * Time.deltaTime;
+				this.body.transform.position += Vector3.forward * Random.Range(1f, 2f) * Time.deltaTime;
+				this.body.transform.position -= Vector3.forward * Random.Range(2f, 2f) * Time.deltaTime;
+			}
 		}
 
 		/* This method is for when the Predator becomes alert, and should then start following the prey
@@ -114,9 +119,11 @@ public class Predator : MonoBehaviour {
 				print("attack!");
 				this.attacking = true; //triggers attack() method to run
 				this.alerted = false;
+				this.roaming = false;
 			} else if (angle >= .8f){
 				print("in sight!");
 				this.alerted = true; //triggers alert() method to run
+				this.roaming = false;
 			}
 			return distance;
 		}
@@ -144,8 +151,11 @@ public class Predator : MonoBehaviour {
 			Vector3 distance = GameObject.Find("Prey").transform.position - p.body.transform.position;
 			int preySeen = p.visionTest ();
 
-			p.alert(); //calling this by default, this method checks if alerted == true
-			p.attack(); //same ^
+
+			//calling these by default, the method checks if alerted == true, etc.
+			p.roam();
+			p.alert(); 
+			p.attack(); 
 
 			//TODO: This code wasn't running (based off of print statement) Still need to handle
 			//the interest level portion.
