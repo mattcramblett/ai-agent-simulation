@@ -140,7 +140,7 @@ public class Predator : MonoBehaviour {
 			}else if (Input.GetKey(KeyCode.S)){
 				p.body.transform.position -= Vector3.forward * rate * Time.deltaTime;
 			}
-
+			Vector3 distance = GameObject.Find("Prey").transform.position - p.body.transform.position;
 			int preySeen = p.visionTest ();
 			//may need to change this: if value is so low, probably touched and game over
 			if (preySeen >= 0) {
