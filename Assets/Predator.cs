@@ -12,11 +12,11 @@ public class Predator : MonoBehaviour {
 
 	public class PredatorSprite {
 		public GameObject body;
-		bool roaming; //moves throughout scene, Prey not seen
-		bool alerted; //sees Prey from a distance, starts following slowly
-		bool attacking; //sees Prey close by, follows prey quickly
-		bool swarming; //alerts other predators - they switch to attack mode
-		int loseInterestCount;
+		public bool roaming; //moves throughout scene, Prey not seen
+		public bool alerted; //sees Prey from a distance, starts following slowly
+		public bool attacking; //sees Prey close by, follows prey quickly
+		public bool swarming; //alerts other predators - they switch to attack mode
+		public int loseInterestCount;
 
 
 		//CONSTRUCTOR:
@@ -36,19 +36,6 @@ public class Predator : MonoBehaviour {
 				body.GetComponent<Renderer>().material = material;
 			//set name of PredatorSprite object (may come in handy for lookup):
 			body.name = name;
-		}
-		//accessors
-		public bool getAttack(){
-			return attacking;
-		}
-		public bool getRoaming(){
-			return roaming;
-		}
-		public bool getAlerted(){
-			return alerted;
-		}
-		public bool getSwarming(){
-			return swarming;
 		}
 
 		public int interest(string todo){
@@ -72,7 +59,16 @@ public class Predator : MonoBehaviour {
 		** by closing in on it
 		*/
 		public void alert(){
-
+			if(this.alerted){
+				float moveSpeed = 2f;
+				float rotationSpeed = 2f;
+				Transform target = GameObject.Find("Prey").transform;
+				//rotate to look at the player
+    			this.body.transform.rotation = Quaternion.Slerp(this.body.transform.rotation,
+    			Quaternion.LookRotation(target.position - this.body.transform.position), rotationSpeed*Time.deltaTime);
+ 				//move towards the player
+ 				this.body.transform.position += this.body.transform.forward * moveSpeed * Time.deltaTime;
+ 			}
 		}
 
 		/* This method will basically be the same as alert but the movement will be fast
@@ -103,9 +99,10 @@ public class Predator : MonoBehaviour {
 			//this math is not quite right yet.
 			float angle = Vector3.Dot (orientation, toTarget.normalized);
 			//result of 1 means it's right in front. make comparison value SMALLER for LARGER site cone
-			if (angle >= .95 ) {
+			if (angle >= .9f ) {
 				//in sight
 				print("in sight!");
+				this.alerted = true;
 			}
 			return distance;
 		}
@@ -130,18 +127,10 @@ public class Predator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		foreach (PredatorSprite p in Predators){
-
-			if (Input.GetKey(KeyCode.A)){
-				p.body.transform.position += Vector3.left * rate * Time.deltaTime;
-			}else if (Input.GetKey(KeyCode.D)){
-				p.body.transform.position += Vector3.right * rate * Time.deltaTime;
-			}else if (Input.GetKey(KeyCode.W)){
-				p.body.transform.position += Vector3.forward * rate * Time.deltaTime;
-			}else if (Input.GetKey(KeyCode.S)){
-				p.body.transform.position -= Vector3.forward * rate * Time.deltaTime;
-			}
 			Vector3 distance = GameObject.Find("Prey").transform.position - p.body.transform.position;
 			int preySeen = p.visionTest ();
+			//p.alerted = true;
+			p.alert();
 			//may need to change this: if value is so low, probably touched and game over
 			if (preySeen >= 0) {
 				//prey is within attack range and has not lost interest
@@ -151,7 +140,7 @@ public class Predator : MonoBehaviour {
 					p.attack ();
 				} else {
 					//if attacking or alerted but not seeing prey, increase lose interest count
-					if (p.getAttack () || p.getAlerted ()) {
+					if (p.attacking || p.alerted) {
 						p.interest ("increase");
 					}
 					//alerted does not affect interest - aka easy to lose when alerted
