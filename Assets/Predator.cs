@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Predator : MonoBehaviour {
 
 	public float rate = 5f;
-	int numPredators = 3;
+	int numPredators = 1;
 	public ArrayList Predators;
 	int attackThreshold = 5;
 	bool allSwarm = false;
@@ -119,14 +119,16 @@ public class Predator : MonoBehaviour {
 			GameObject obstacle = GameObject.Find ("Obstacle");
 			float obstacleDistance = Mathf.Sqrt (Mathf.Pow (obstacle.transform.position.x - body.transform.position.x, 2f) + Mathf.Pow (obstacle.transform.position.z - body.transform.position.z, 2f));
 			bool obstacleSeen = seeObstacle () && (obstacleDistance < distance);
+			//print ("Obstacle: " + obstacleSeen);
+			//print ("Target: " + distance);
 			//result of 1 means it's right in front. make comparison value SMALLER for LARGER site cone
-			if (angle >= .95f && distance <= 4 && distance > 0) {
+			if (angle >= .95f && distance <= 4 && distance > 0 && !obstacleSeen) {
 				//in sight
 				//print("attack");
 				this.attacking = true; //triggers attack() method to run
 				this.alerted = false;
 				this.roaming = false;
-			} else if (angle >= .8f && distance < 8) {
+			} else if (angle >= .8f && distance < 8 && !obstacleSeen) {
 				//print("alert");
 				this.alerted = true; //triggers alert() method to run
 				this.roaming = false;
