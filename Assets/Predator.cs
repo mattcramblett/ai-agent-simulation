@@ -5,11 +5,12 @@ using System.Collections.Generic;
 public class Predator : MonoBehaviour {
 
 	public float rate = 5f;
-	int numPredators = 1;
+	int numPredators = 5;
 	public ArrayList Predators;
 	int attackThreshold = 5;
 	bool allSwarm = false;
 	static float attackSpeed = 4f;
+	static Vector3 originalScale;
 
 	public class PredatorSprite {
 		public GameObject body;
@@ -22,7 +23,8 @@ public class Predator : MonoBehaviour {
 		//CONSTRUCTOR:
 		public PredatorSprite(string name){
 			body = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			//body.AddComponent<Rigidbody>();
+			
+			body.AddComponent<Rigidbody>();
 			//initial state is roaming:
 			roaming = true;
 			alerted = false;
@@ -36,6 +38,7 @@ public class Predator : MonoBehaviour {
 				body.GetComponent<Renderer>().material = material;
 			//set name of PredatorSprite object (may come in handy for lookup):
 			body.name = name;
+			originalScale = new Vector3(0.3f, 0.3f, 0.3f);
 		}
 			
 		/* this method could return an update to a position vector, but otherwise should
@@ -165,6 +168,7 @@ public class Predator : MonoBehaviour {
 		bool allEscaped = true;
 		GameObject prey = GameObject.Find ("Prey");
 		foreach (PredatorSprite p in Predators){
+			p.body.transform.localScale = originalScale;
 			if (prey != null) {
 				float distance = p.visionTest ();
 				//print (distance);
