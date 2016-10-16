@@ -14,3 +14,8 @@ Z: decreases predator attack speed
 
 M: generates a new predator
 D: deletes a predator
+
+The additional parts completed are:
+Fixed obstacle that no object can move through
+Fixed obstacle that predators cannot see through
+Parameterized predator speed and number of predators
