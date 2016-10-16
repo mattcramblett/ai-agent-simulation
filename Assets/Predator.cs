@@ -22,7 +22,7 @@ public class Predator : MonoBehaviour {
 		//CONSTRUCTOR:
 		public PredatorSprite(string name){
 			body = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			body.AddComponent<Rigidbody>();
+			//body.AddComponent<Rigidbody>();
 			//initial state is roaming:
 			roaming = true;
 			alerted = false;
@@ -48,27 +48,19 @@ public class Predator : MonoBehaviour {
 			//Transform target = GameObject.Find("Prey").transform;
 			//rotate to look at the player
 			//this.body.transform.rotation = Quaternion.Slerp(this.body.transform.rotation,
-				//Quaternion.LookRotation(target.position - this.body.transform.position), rotationSpeed*Time.deltaTime);	
-			this.body.transform.position += Vector3.forward * Random.Range(1f, 2f) * Time.deltaTime;
+				//Quaternion.LookRotation(target.position - this.body.transform.position), rotationSpeed*Time.deltaTime);
+			//print(this.body.transform.position);
+			float rand = Random.Range (-18,18);
+			float rand2 = Random.Range (-18, 18);
+			Vector3 goal = new Vector3 (rand, 0, rand2);
 
-				int rand = Random.Range (1,20);
-				//switch case to usually move forwards, sometimes rotate
-				switch (rand) {
-				case 1:
-					//rotate 
-					//this.body.transform.rotation = Quaternion.Slerp (this.body.transform.rotation,
-						//Quaternion.LookRotation (this.body.transform.position - target.position), rotationSpeed * Time.deltaTime);
-					//this.body.transform.position += Vector3.left * Random.Range(1f, 2f) * Time.deltaTime;
+			this.body.transform.rotation = Quaternion.Slerp (this.body.transform.rotation,
+				Quaternion.LookRotation (goal - this.body.transform.position), rotationSpeed * Time.deltaTime);
+			//move towards goal
+			this.body.transform.position += this.body.transform.forward * Random.Range(1f, 2f) * Time.deltaTime;
 
-					break;
-				default:
-					//move forwards 
-					break;
-				}
-				//this.body.transform.position += Vector3.right * Random.Range (1f, 2f) * Time.deltaTime;
 
-				//this.body.transform.position -= Vector3.forward * Random.Range(2f, 2f) * Time.deltaTime;
-
+		
 		}
 
 		/* This method is for when the Predator becomes alert, and should then start following the prey
