@@ -11,7 +11,6 @@ public class Predator : MonoBehaviour {
 	bool allSwarm = false;
 	static float attackSpeed = 4f;
 
-
 	public class PredatorSprite {
 		public GameObject body;
 		public bool roaming; //moves throughout scene, Prey not seen
@@ -23,6 +22,7 @@ public class Predator : MonoBehaviour {
 		//CONSTRUCTOR:
 		public PredatorSprite(string name){
 			body = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			body.AddComponent<Rigidbody>();
 			//initial state is roaming:
 			roaming = true;
 			alerted = false;
@@ -104,6 +104,10 @@ public class Predator : MonoBehaviour {
 			}
 		}
 
+		public bool seeObstacle(){
+			return Physics.Raycast (body.transform.position, body.transform.forward, 100);
+		}
+
 		public float visionTest(){
 			float distance = -1;
 			GameObject target = GameObject.Find ("Prey");
@@ -112,14 +116,15 @@ public class Predator : MonoBehaviour {
 			distance = Mathf.Sqrt (Mathf.Pow(target.transform.position.x - body.transform.position.x,2f) + Mathf.Pow(target.transform.position.z - body.transform.position.z,2f));
 			Vector3 orientation = body.transform.forward;
 			float angle = Vector3.Dot (orientation, toTarget.normalized);
+			bool obstacle = seeObstacle ();
 			//result of 1 means it's right in front. make comparison value SMALLER for LARGER site cone
-			if (angle >= .95f && distance <= 4 && distance > 0) {
+			if (angle >= .95f && distance <= 4 && distance > 0 && !obstacle) {
 				//in sight
 				//print("attack");
 				this.attacking = true; //triggers attack() method to run
 				this.alerted = false;
 				this.roaming = false;
-			} else if (angle >= .8f && distance < 8) {
+			} else if (angle >= .8f && distance < 8 && !obstacle) {
 				//print("alert");
 				this.alerted = true; //triggers alert() method to run
 				this.roaming = false;
@@ -166,6 +171,7 @@ public class Predator : MonoBehaviour {
 		foreach (PredatorSprite p in Predators){
 			if (prey != null) {
 				float distance = p.visionTest ();
+				//print (distance);
 				if (distance < 1 && distance > 0) {
 					print ("You have been captured by the predators!");
 					GameObject.Destroy (prey);
