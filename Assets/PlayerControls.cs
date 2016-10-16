@@ -16,5 +16,14 @@ public class PlayerControls : MonoBehaviour {
 		}else if (Input.GetKey(KeyCode.DownArrow)){
 			transform.position -= Vector3.forward * rate * Time.deltaTime;
         }
+
+		if (Input.GetKeyDown (KeyCode.S)) {
+			rate = rate + 1;
+		}
+		if (Input.GetKeyDown (KeyCode.A)) {
+			if (rate > 1) {
+				rate = rate - 1;
+			}
+		}
     }
 }
