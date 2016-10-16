@@ -116,15 +116,17 @@ public class Predator : MonoBehaviour {
 			distance = Mathf.Sqrt (Mathf.Pow(target.transform.position.x - body.transform.position.x,2f) + Mathf.Pow(target.transform.position.z - body.transform.position.z,2f));
 			Vector3 orientation = body.transform.forward;
 			float angle = Vector3.Dot (orientation, toTarget.normalized);
-			bool obstacle = seeObstacle ();
+			GameObject obstacle = GameObject.Find ("Obstacle");
+			float obstacleDistance = Mathf.Sqrt (Mathf.Pow (obstacle.transform.position.x - body.transform.position.x, 2f) + Mathf.Pow (obstacle.transform.position.z - body.transform.position.z, 2f));
+			bool obstacleSeen = seeObstacle () && (obstacleDistance < distance);
 			//result of 1 means it's right in front. make comparison value SMALLER for LARGER site cone
-			if (angle >= .95f && distance <= 4 && distance > 0 && !obstacle) {
+			if (angle >= .95f && distance <= 4 && distance > 0) {
 				//in sight
 				//print("attack");
 				this.attacking = true; //triggers attack() method to run
 				this.alerted = false;
 				this.roaming = false;
-			} else if (angle >= .8f && distance < 8 && !obstacle) {
+			} else if (angle >= .8f && distance < 8) {
 				//print("alert");
 				this.alerted = true; //triggers alert() method to run
 				this.roaming = false;
