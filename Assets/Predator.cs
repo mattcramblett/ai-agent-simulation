@@ -28,7 +28,7 @@ public class Predator : MonoBehaviour {
 			alerted = false;
 			attacking = false;
 			swarming = false;
-			//semi-random start position: (currently top corner area)
+			//random start position
 			body.transform.position = new Vector3(Random.Range(-15f, 15f), 0.5f, Random.Range(-15f, 15f));
 			//Add the material for color:
 			Material material = new Material(Shader.Find("Standard"));
